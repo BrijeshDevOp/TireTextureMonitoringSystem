@@ -9,6 +9,7 @@
 !/static/
 !/app.py
 !/model3.hdf5
+!/model3.keras
 !/requirements.txt
 !/runtime.txt
 !/README.md
