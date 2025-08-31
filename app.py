@@ -9,7 +9,12 @@ import os
 app = Flask(__name__)
 
 # Load model once when the app starts
-model = tf.keras.models.load_model('model3.hdf5', compile=False)
+model_path_keras = 'model3.keras'
+model_path_hdf5 = 'model3.hdf5'
+if os.path.exists(model_path_keras):
+    model = tf.keras.models.load_model(model_path_keras, compile=False)
+else:
+    model = tf.keras.models.load_model(model_path_hdf5, compile=False)
 
 # Classes
 classes = {0: 'Normal Tire', 1: 'Cracked Tire'}

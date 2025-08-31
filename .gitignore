@@ -14,11 +14,13 @@
 !/README.md
 !/DEPLOYMENT.md
 !/v1.0.txt
+!/model.ipynb
+!/train.py
+!/evaluate.py
 
 # Explicitly ignore these files (already covered by /*, but listed for clarity)
 /app_test.py
 /.gitattributes
-/model.ipynb
 /upload.png
 /dataset
 
