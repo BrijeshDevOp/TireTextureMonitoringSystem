@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tire Texture Classifier — AI Detection</title>
+    <meta
+      name="description"
+      content="Upload a tire image and detect Normal or Cracked using AI instantly."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* prevent horizontal scrollbar */
+      }
+      .glass-card {
+        border-radius: 1.2rem;
+        background: #fff;
+        width: 100%;
+        max-width: 700px; /* keep card narrower */
+        margin: auto;
+      }
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      @media (min-width: 768px) {
+        .hero-title {
+          font-size: 2.3rem;
+        }
+      }
+      .upload-box {
+        border: 2px dashed #6c757d;
+        border-radius: 0.8rem;
+        padding: 1.5rem;
+        text-align: center;
+        background-color: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .upload-box.dragover {
+        background-color: #e9f7ef;
+        border-color: #198754;
+      }
+      .upload-box input {
+        display: none;
+      }
+      .badge-large {
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.6rem;
+      }
+      .preview-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.6rem;
+      }
+    </style>
+  </head>
+  <body class="bg-light text-dark">
+    <main
+      class="d-flex align-items-center justify-content-center min-vh-100 py-3"
+    >
+      <div class="glass-card shadow p-4">
+        <header class="text-center mb-4">
+          <div class="text-uppercase fw-semibold text-success small">
+            AI-powered
+          </div>
+          <h1 class="hero-title fw-bold mb-2">Tire Texture Classifier</h1>
+          <p class="text-secondary m-0">
+            Upload a tire image to instantly detect whether it is
+            <span class="text-success">Normal</span> or
+            <span class="text-danger">Cracked</span>.
+          </p>
+        </header>
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data" class="mb-3">
+          <div id="uploadBox" class="upload-box mb-3">
+            <p class="mb-1 fw-semibold">Drag & drop your file here</p>
+            <p class="small text-muted mb-2">
+              or click to browse (JPG, JPEG, PNG)
+            </p>
+            <input
+              id="file"
+              type="file"
+              name="file"
+              accept="image/*"
+              required
+            />
+            <button type="button" class="btn btn-outline-success btn-sm">
+              Choose File
+            </button>
+          </div>
+
+          <!-- Preview Box -->
+          <div
+            id="previewContainer"
+            class="text-center mb-3"
+            style="display: none;"
+          >
+            <p class="text-muted small mb-2">Preview:</p>
+            <img
+              id="previewImage"
+              src=""
+              class="preview-image shadow-sm"
+              alt="Preview"
+            />
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-success btn-lg">
+              Upload & Predict
+            </button>
+          </div>
+        </form>
+
+        <!-- Results -->
+        {% if image_url %}
+        <div class="mt-4">
+          <div class="text-center mb-3">
+            <img
+              src="{{ image_url }}"
+              class="preview-image shadow-sm"
+              alt="Uploaded Image"
+              loading="lazy"
+            />
+          </div>
+          <div class="text-center">
+            <p class="text-muted mb-2">Prediction</p>
+            {% if prediction %} {% if 'Normal' in prediction %}
+            <span
+              class="badge bg-success-subtle text-success-emphasis badge-large"
+              >{{ prediction }}</span
+            >
+            {% elif 'Cracked' in prediction %}
+            <span
+              class="badge bg-danger-subtle text-danger-emphasis badge-large"
+              >{{ prediction }}</span
+            >
+            {% else %}
+            <span
+              class="badge bg-secondary-subtle text-secondary-emphasis badge-large"
+              >{{ prediction }}</span
+            >
+            {% endif %} {% else %}
+            <span class="text-muted">No prediction available</span>
+            {% endif %}
+          </div>
+        </div>
+        {% elif prediction %}
+        <div class="alert alert-warning shadow-sm mt-3 text-center" role="alert">
+          {{ prediction }}
+        </div>
+        {% endif %}
+
+        <footer class="text-center small text-muted mt-4">
+          Powered by TensorFlow • Designed for clarity and speed
+        </footer>
+      </div>
+    </main>
+
+    <!-- Drag & Drop + Preview Script -->
+    <script>
+      const uploadBox = document.getElementById("uploadBox");
+      const fileInput = document.getElementById("file");
+      const previewContainer = document.getElementById("previewContainer");
+      const previewImage = document.getElementById("previewImage");
+
+      function showPreview(file) {
+        if (!file || !file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewImage.src = e.target.result;
+          previewContainer.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+
+      uploadBox.addEventListener("click", () => fileInput.click());
+
+      fileInput.addEventListener("change", () => {
+        if (fileInput.files.length) {
+          showPreview(fileInput.files[0]);
+        }
+      });
+
+      uploadBox.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        uploadBox.classList.add("dragover");
+      });
+
+      uploadBox.addEventListener("dragleave", () => {
+        uploadBox.classList.remove("dragover");
+      });
+
+      uploadBox.addEventListener("drop", (e) => {
+        e.preventDefault();
+        uploadBox.classList.remove("dragover");
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          showPreview(e.dataTransfer.files[0]);
+        }
+      });
+    </script>
+  </body>
+</html>

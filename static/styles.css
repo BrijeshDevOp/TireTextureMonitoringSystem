@@ -1,0 +1,100 @@
+:root {
+  --brand: #1f6feb;
+  --brand-700: #1a5ac1;
+  --surface: #f8faff;
+  --stroke: rgba(0, 0, 0, 0.08);
+  --text: #222;
+}
+
+.app-body {
+  background: linear-gradient(135deg, #eaf1fc 0%, #ffffff 50%, #e6eefb 100%);
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+    Arial, sans-serif;
+  color: var(--text);
+}
+
+/* Card */
+.glass-card {
+  background: white;
+  border: 1px solid var(--stroke);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Hero */
+.brand-kicker {
+  letter-spacing: 0.08em;
+  color: var(--brand);
+}
+.hero-title {
+  font-size: clamp(1.6rem, 3vw + 1rem, 2.25rem);
+}
+.hero-subtitle {
+  max-width: 52ch;
+  margin-inline: auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Preview */
+.preview-card {
+  background: var(--surface);
+  border: 1px dashed var(--stroke);
+  border-radius: 12px;
+}
+.preview-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+
+/* Result */
+.result-card {
+  background: var(--surface);
+  border: 1px solid var(--stroke);
+  border-radius: 12px;
+}
+.badge-large {
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Buttons */
+.btn-brand {
+  background: var(--brand);
+  border: none;
+  color: white;
+}
+.btn-brand:hover {
+  background: var(--brand-700);
+}
+
+/* Inputs */
+.upload-input {
+  background: white;
+  border: 1px solid var(--stroke);
+  color: var(--text);
+}
+.upload-input:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 0.2rem rgba(31, 111, 235, 0.25);
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .glass-card {
+    padding: 1.25rem !important;
+  }
+  .badge-large {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.85rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .preview-image {
+    max-height: 420px;
+    object-fit: cover;
+  }
+}
