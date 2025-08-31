@@ -15,7 +15,6 @@
 !/README.md
 !/DEPLOYMENT.md
 !/v1.0.txt
-!/model.ipynb
 !/train.py
 !/evaluate.py
 
@@ -24,6 +23,7 @@
 /.gitattributes
 /upload.png
 /dataset
+/model3.ipynb
 
 # Ensure contents inside whitelisted directories are also included
 !/templates/**
